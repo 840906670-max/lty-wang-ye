@@ -1,0 +1,72 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#b9dce2">
+<title>刘小昱的海岛</title>
+<style>
+@font-face{font-family:"Smiley Sans";src:url("assets/fonts/SmileySans-Oblique.woff2") format("woff2");font-display:swap}
+:root{font-family:"Microsoft YaHei","PingFang SC",sans-serif;color:#24505e;background:#b9dce2}*{box-sizing:border-box}html,body{width:100%;height:100%;margin:0}body{overflow:hidden}
+.page{position:relative;display:grid;grid-template-rows:auto auto;justify-items:center;align-content:center;gap:12px;width:100%;height:100vh;height:100dvh;padding:max(12px,env(safe-area-inset-top)) 12px max(12px,env(safe-area-inset-bottom));overflow:hidden;background:radial-gradient(circle at 8% 7%,#fff4d7 0,transparent 38%),radial-gradient(circle at 96% 89%,#fbe7ea 0,transparent 35%),#b9dce2}
+.page::before,.page::after{position:absolute;pointer-events:none;color:#fff7e5;opacity:.78;font:44px/1 Georgia,serif;content:"✦"}.page::before{left:4%;top:24%;transform:rotate(-16deg)}.page::after{right:4%;bottom:21%;color:#f7cfbb;transform:rotate(15deg)}
+.heading{z-index:2;min-height:58px;text-align:center}.eyebrow{display:block;margin-bottom:2px;color:#5b8c95;font-size:10px;letter-spacing:.25em}.heading h1{margin:0;color:#276477;font:400 clamp(27px,3.7vw,42px)/1.16 "Smiley Sans","Microsoft YaHei",sans-serif;letter-spacing:.04em;white-space:nowrap}
+.scene{position:relative;z-index:1;width:min(calc(100vw - 32px),calc((100dvh - 126px)*16/9));aspect-ratio:16/9;max-height:calc(100dvh - 126px);overflow:hidden;border:4px solid #fff9e9;border-radius:20px;background:#88bed0;box-shadow:0 0 0 8px #fff9e966,0 18px 45px #356a793d;isolation:isolate;touch-action:manipulation;cursor:default;outline:none;-webkit-tap-highlight-color:transparent}
+.scene::after{content:"";position:absolute;z-index:3;inset:6px;border:1px dashed #fff8e9b0;border-radius:11px;pointer-events:none}
+.scene video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block;pointer-events:none}
+.controls{position:absolute;z-index:4;left:0;right:0;bottom:12px;display:flex;justify-content:space-between;align-items:center;padding:0 12px;pointer-events:none}
+.control-button{min-height:36px;padding:7px 13px;border:1px solid #fff9e9;border-radius:999px;color:#276477;background:#fff9e9e8;box-shadow:0 3px 10px #356a7926;font:inherit;font-size:12px;letter-spacing:.02em;cursor:pointer;pointer-events:auto;touch-action:manipulation}
+.control-button:hover{background:#fff}.control-button:focus-visible{outline:2px solid #276477;outline-offset:2px}.control-button[aria-pressed=true]{background:#276477;color:#fff9e9}
+.action-label{position:absolute;z-index:4;bottom:18px;left:50%;transform:translateX(-50%);margin:0;padding:7px 15px;border:1px solid #fff8e9;border-radius:999px;color:#fff;background:#256272c9;box-shadow:0 3px 14px #19434d33;font-size:13px;white-space:nowrap;pointer-events:none}.action-label[hidden]{display:none}
+.loading{position:absolute;z-index:5;top:50%;left:50%;transform:translate(-50%,-50%);width:max-content;max-width:80%;margin:0;padding:12px 18px;border:1px solid #fff8e9;border-radius:14px;color:#265c6b;background:#fff9e9ef;text-align:center;font-size:13px;line-height:1.6}.loading[hidden]{display:none}
+@media(max-width:620px){.page{gap:10px}.heading{min-height:50px}.scene{width:calc(100vw - 20px);max-height:none;border-width:3px;border-radius:12px;box-shadow:0 0 0 4px #fff9e977,0 9px 25px #356a7933}.scene::after{inset:4px;border-radius:6px}.controls{bottom:9px;padding:0 8px}.control-button{min-height:34px;padding:6px 10px;font-size:11px}.page::before{top:19%;left:7%;font-size:28px}.page::after{bottom:19%;right:7%;font-size:29px}.action-label{bottom:58px;font-size:11px;padding:5px 10px}}
+@media(max-height:450px) and (orientation:landscape){.page{display:block;padding:0}.heading{display:none}.scene{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:min(calc(100vw - 12px),calc((100dvh - 12px)*16/9));max-height:calc(100dvh - 12px);border-width:3px;border-radius:12px}.scene::after{inset:4px;border-radius:6px}.controls{bottom:9px;padding:0 9px}.control-button{min-height:34px;padding:6px 10px;font-size:11px}.action-label{bottom:58px;font-size:11px;padding:5px 10px}}
+@media (orientation:portrait) and (max-width:620px){.scene{width:calc(100vw - 20px);max-height:none}.controls{bottom:9px;padding:0 8px}.control-button{min-height:34px;padding:6px 10px;font-size:11px}.action-label{bottom:58px}}
+</style>
+</head>
+<body>
+<main class="page">
+<header class="heading"><span class="eyebrow">SUMMER ISLAND</span><h1>刘小昱的海岛</h1></header>
+<section class="scene" id="scene" role="button" tabindex="0" aria-label="点击画面切换动作" aria-busy="true">
+<video id="island-video" poster="assets/rendered/poster.jpg" autoplay muted loop playsinline preload="auto" width="1280" height="720" aria-label="完整渲染的海岛动画"></video>
+<p class="action-label" id="action-label" role="status" aria-live="polite" hidden></p>
+<p class="loading" id="loading" role="status">小岛正在准备中…</p>
+<div class="controls" aria-label="动画控制"><button class="control-button action-switch" id="action-switch" type="button" aria-label="切换动作">点击画面</button><button class="control-button invite" id="invite-friend" type="button" aria-pressed="false">邀请他上岛</button></div>
+<noscript><p class="loading">请开启 JavaScript 观看动画。</p></noscript>
+</section>
+</main>
+<script>
+const actions=[
+  ['yobro','Yo Bro'],['walk','走路'],['bow','鞠躬'],['basketball','投篮'],['thoughtful','若有所思'],
+  ['like','点赞'],['defiant','不忿'],['wild','发癫'],
+  ['scared','害怕'],['angry','生气'],['box','拳击'],['spell','施法'],
+  ['dance2','舞蹈二'],['dance3','舞蹈三'],['flee','奔跑'],['angry3','愤怒']
+];
+const scene=document.getElementById('scene');
+const video=document.getElementById('island-video');
+const actionSwitch=document.getElementById('action-switch');
+const invite=document.getElementById('invite-friend');
+const loading=document.getElementById('loading');
+const label=document.getElementById('action-label');
+let actionIndex=1,withFriend=false,requestId=0,labelTimer=0;
+function source(){return 'assets/rendered/'+actions[actionIndex][0]+'-'+(withFriend?'duo':'solo')+'.mp4'}
+function showLabel(message){label.textContent=message;label.hidden=false;clearTimeout(labelTimer);labelTimer=setTimeout(()=>label.hidden=true,1800)}
+function playCurrent(keepTime=false){
+  const id=++requestId, previousTime=keepTime&&Number.isFinite(video.currentTime)?video.currentTime:0;
+  loading.textContent='小岛正在准备中…';loading.hidden=false;scene.setAttribute('aria-busy','true');
+  video.onloadedmetadata=()=>{if(id!==requestId)return;if(keepTime&&video.duration)video.currentTime=previousTime%video.duration};
+  video.oncanplay=()=>{if(id!==requestId)return;loading.hidden=true;scene.setAttribute('aria-busy','false');video.play().catch(()=>{})};
+  video.onerror=()=>{if(id!==requestId)return;loading.textContent='这个动作还在制作中，请再试一次。';scene.setAttribute('aria-busy','false')};
+  video.src=source();video.load();video.play().catch(()=>{});
+}
+function nextAction(){actionIndex=(actionIndex+1)%actions.length;showLabel(actions[actionIndex][1]);playCurrent()}
+actionSwitch.addEventListener('click',nextAction);
+scene.addEventListener('click',event=>{if(event.target.closest('button'))return;nextAction()});
+invite.addEventListener('click',()=>{withFriend=!withFriend;invite.setAttribute('aria-pressed',String(withFriend));invite.textContent=withFriend?'让他回去':'邀请他上岛';showLabel(withFriend?'两个人一起 '+actions[actionIndex][1]:actions[actionIndex][1]);playCurrent(true)});
+document.addEventListener('visibilitychange',()=>{if(document.hidden)video.pause();else video.play().catch(()=>{})});
+playCurrent();
+</script>
+</body>
+</html>
+
+
